@@ -155,9 +155,18 @@ int cam_vfe_deinit_soc_resources(struct cam_hw_soc_info *soc_info)
 		return -ENODEV;
 	}
 
+<<<<<<< HEAD
 	rc = cam_cpas_unregister_client(soc_private->cpas_handle);
 	if (rc)
 		CAM_ERR(CAM_ISP, "CPAS unregistration failed rc=%d", rc);
+=======
+	if (!rc && soc_private->cpas_version == CAM_CPAS_TITAN_175_V120) {
+		rc = cam_cpas_unregister_client(soc_private->cpas_handle[1]);
+		if (rc)
+			CAM_ERR(CAM_ISP, "CPAS1 unregistration failed rc=%d",
+				rc);
+	}
+>>>>>>> bd67f6b... drivers: fix numerous misleading indentation warnings
 
 	rc = cam_vfe_release_platform_resource(soc_info);
 	if (rc < 0)
@@ -201,6 +210,19 @@ int cam_vfe_enable_soc_resources(struct cam_hw_soc_info *soc_info)
 		goto end;
 	}
 
+<<<<<<< HEAD
+=======
+	if (!rc && soc_private->cpas_version == CAM_CPAS_TITAN_175_V120) {
+		rc = cam_cpas_start(soc_private->cpas_handle[1], &ahb_vote,
+			&axi_vote);
+		if (rc) {
+			CAM_ERR(CAM_ISP, "Error! CPAS1 start failed rc=%d", rc);
+			rc = -EFAULT;
+			goto end;
+		}
+	}
+
+>>>>>>> bd67f6b... drivers: fix numerous misleading indentation warnings
 	rc = cam_soc_util_enable_platform_resource(soc_info, true,
 		CAM_TURBO_VOTE, true);
 	if (rc) {
@@ -289,5 +311,16 @@ int cam_vfe_disable_soc_resources(struct cam_hw_soc_info *soc_info)
 		return rc;
 	}
 
+<<<<<<< HEAD
+=======
+	if (!rc && soc_private->cpas_version == CAM_CPAS_TITAN_175_V120) {
+		rc = cam_cpas_stop(soc_private->cpas_handle[1]);
+		if (rc) {
+			CAM_ERR(CAM_ISP, "Error! CPAS stop failed rc=%d", rc);
+			return rc;
+		}
+	}
+
+>>>>>>> bd67f6b... drivers: fix numerous misleading indentation warnings
 	return rc;
 }
